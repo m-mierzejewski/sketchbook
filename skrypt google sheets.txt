@@ -1,0 +1,97 @@
+arkusz: https://docs.google.com/spreadsheets/d/1PX13UGkbpiBlHNErI5JKvHvcs92yg2cL8jk9tOLnqac/edit#gid=0
+
+ID: 1PX13UGkbpiBlHNErI5JKvHvcs92yg2cL8jk9tOLnqac
+
+aplikacja internetowa: https://script.google.com/macros/s/AKfycbx9k6gl0xOFeyy2EmCgs6KadieNZ99kb54INbpGtO7YJRXQndI-/exec
+
+
+//-----------------------------------------------
+//Originally published by Mogsdad@Stackoverflow
+//Modified for jarkomdityaz.appspot.com
+//Modified for Hackster.io by Stephen Borsay
+//-----------------------------------------------
+/*
+
+GET request query:
+
+https://script.google.com/macros/s/<gscript id>/exec?celData=data_here
+----------------------------------------------------------------------
+
+GScript, PushingBox and Arduino/ESP8266 Variables in order:
+
+distance
+procent
+
+----------------------------------------------------
+3/11/2018
+Poprawione żeby dopisywał nowe wiersze w 5 linii
+(najnowsza wartość u góry)
+*/
+
+
+/* Using spreadsheet API */
+
+function doGet(e) { 
+  Logger.log( JSON.stringify(e) );  // view parameters
+
+  var result = 'Ok'; // assume success
+
+  if (e.parameter == undefined) {
+    result = 'No Parameters';
+  }
+  else {
+    var id = '1PX13UGkbpiBlHNErI5JKvHvcs92yg2cL8jk9tOLnqac';//docs.google.com/spreadsheetURL/d
+    var sheet = SpreadsheetApp.openById(id).getActiveSheet();
+    sheet.insertRowBefore(5);
+    var newRow = 5;
+    var rowData = [];
+    rowData[0]="";
+    rowData[1]="";
+    rowData[2]="";
+    rowData[3]="";
+    rowData[4] = new Date(); // Timestamp in column E
+    
+    for (var param in e.parameter) {
+      Logger.log('In for loop, param='+param);
+      var value = stripQuotes(e.parameter[param]);
+      //Logger.log(param + ':' + e.parameter[param]);
+      switch (param) {
+        case 'distance': //Parameter
+          rowData[5] = value; //Value in column F
+          rowData[7] = value * 7.3124 / 1000;
+          odl= value;
+          break;
+        case 'procent':
+          rowData[6] = value;
+          proc = value;
+          break;
+        default:
+          result = "unsupported parameter";
+        }
+    }
+      
+     Logger.log(JSON.stringify(rowData));
+
+    // Write new row below
+    var newRange = sheet.getRange(newRow, 1, 1, rowData.length);
+    newRange.setValues([rowData]);
+    //Write cells for chart
+    var cell = sheet.getRange("F1"); 
+    if (odl < 0) {  cell.setValue(0) }
+    else { cell.setValue(odl) }
+    
+    var cell = sheet.getRange("b2");
+    if (proc < 0 ) { cell.setValue(0) }
+    else {cell.setValue(proc/100) }
+  }
+
+  // Return result of operation
+  return ContentService.createTextOutput(result);
+}
+
+/**
+* Remove leading and trailing single or double quotes
+*/
+function stripQuotes( value ) {
+  return value.replace(/^["']|['"]$/g, "");
+}

@@ -1,0 +1,15 @@
+Action: https://script.google.com/macros/s/AKfycbx9k6gl0xOFeyy2EmCgs6KadieNZ99kb54INbpGtO7YJRXQndI-/exec
+Method: GET
+ 
+
+devid googlesheets: v9E0DD9C98A61BAC
+Data: ?distance=$distance$&procent=$procent$
+do testowania: http://api.pushingbox.com/pushingbox?devid=v9E0DD9C98A61BAC&distance=7&procent=23
+
+
+
+devid email:vEDE52E16577C664 z  telewizormarcina.
+Przykładowa wiadomość: W szambie zostało $brakuje$ do pełnrgo. 
+do testowania: http://api.pushingbox.com/pushingbox?devid=vEDE52E16577C664&brakuje=7
+
+
